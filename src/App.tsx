@@ -4,11 +4,12 @@ import { DialogueScreen } from './components/views/DialogueScreen';
 import { NameScreen } from './components/views/NameScreen';
 import { SetupScreen } from './components/views/SetupScreen';
 import { QuestionScreen } from './components/views/QuestionScreen';
+import { PickScreen } from './components/views/PickScreen';
 import { LoadingScreen } from './components/views/LoadingScreen';
 import { ResultScreen } from './components/views/ResultScreen';
-import { Category, CardData, shuffleCards } from './data';
+import { Category, CardData, MEME_CARDS, shuffleCards } from './data';
 
-type AppState = 'WELCOME' | 'INTRO' | 'NAME' | 'SETUP' | 'QUESTION' | 'LOADING' | 'RESULT';
+type AppState = 'WELCOME' | 'INTRO' | 'NAME' | 'SETUP' | 'QUESTION' | 'PICK' | 'LOADING' | 'RESULT';
 
 export default function App() {
   const [appState, setAppState] = useState<AppState>('WELCOME');
@@ -18,11 +19,15 @@ export default function App() {
   const [category, setCategory] = useState<Category>('Love 💕');
   const [question, setQuestion] = useState('');
   const [cardCount, setCardCount] = useState(3);
+  
+  // Custom Flow Deck States
+  const [shuffledDeck, setShuffledDeck] = useState<CardData[]>([]);
   const [drawnCards, setDrawnCards] = useState<CardData[]>([]);
 
   const handleRestart = () => {
     setQuestion('');
     setDrawnCards([]);
+    setShuffledDeck([]);
     setAppState('QUESTION');
   };
 
@@ -61,10 +66,26 @@ export default function App() {
           <QuestionScreen 
             onNext={(q: string) => {
               setQuestion(q);
-              setDrawnCards(shuffleCards(cardCount));
-              setAppState('LOADING');
+              // Prepare an unbiased shuffled deck equal to the total available meme cards
+              setShuffledDeck(shuffleCards(MEME_CARDS.length));
+              setAppState('PICK');
             }} 
           />
+        )}
+
+        {appState === 'PICK' && (
+          <div className="animate-in fade-in zoom-in-95 duration-500 w-full h-full min-h-screen">
+            <PickScreen 
+              totalCards={MEME_CARDS.length}
+              requiredCount={cardCount}
+              onNext={(selectedIndices) => {
+                // Map user's raw picked index to our randomized hidden deck
+                const userPickedCards = selectedIndices.map(index => shuffledDeck[index]);
+                setDrawnCards(userPickedCards);
+                setAppState('LOADING');
+              }}
+            />
+          </div>
         )}
 
         {appState === 'LOADING' && (
