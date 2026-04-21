@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardData, Category, getRandomMeaning } from '../../data';
 import { CardComponent } from './CardComponent';
-import * as htmlToImage from 'html-to-image';
 
 interface ResultScreenProps {
   cards: CardData[];
@@ -16,8 +15,6 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
 }) => {
   const [revealedIndices, setRevealedIndices] = useState<number[]>([]);
   const [meanings, setMeanings] = useState<string[]>([]);
-  const captureRef = useRef<HTMLDivElement>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const message = `Ito ang sagot sa iyong katanungan, ${userName}.`;
 
@@ -48,33 +45,13 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
     }
   };
 
-  const handleDownload = async () => {
-    if (!captureRef.current) return;
-    setIsCapturing(true);
-    try {
-      const dataUrl = await htmlToImage.toPng(captureRef.current, {
-        quality: 0.95,
-        backgroundColor: '#e5edf5',
-        style: { transform: 'scale(1)', transformOrigin: 'top left' }
-      });
-      const link = document.createElement('a');
-      link.download = `charot-reading-${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err) {
-      console.error('Error taking screenshot', err);
-    } finally {
-      setIsCapturing(false);
-    }
-  };
-
   const isComplete = revealedIndices.length === cards.length;
 
   return (
     <div className="w-full h-full flex flex-col gap-4 md:gap-6 relative max-w-6xl mx-auto py-2 md:py-8">
       
       {/* Capture Container */}
-      <div ref={captureRef} className="flex-1 flex flex-col gap-4 bg-[#e5edf5] p-4 md:p-6 rounded-[2.5rem] w-full mt-4">
+      <div className="flex-1 flex flex-col gap-4 bg-[#e5edf5] p-4 md:p-6 rounded-[2.5rem] w-full mt-4">
         
         {/* Header - Dialogue Bubble */}
         <header className="flex flex-col items-center justify-center clay-panel rounded-[2.5rem] p-6 relative text-center mx-2 mb-2">
@@ -131,7 +108,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
           </section>
 
           {/* Actions Panel */}
-          <aside className="w-full md:w-1/4 flex flex-col gap-4 justify-center items-end order-3" data-html2canvas-ignore>
+          <aside className="w-full md:w-1/4 flex flex-col gap-4 justify-center items-end order-3">
             <div className="w-full p-6 clay-panel rounded-[2rem] mb-2 md:mb-auto text-center">
               <span className="text-[10px] tracking-widest text-gray-400 font-bold uppercase mb-3 block">Progress</span>
               <div className="w-full h-3 clay-input rounded-full overflow-hidden mt-1 mb-3">
@@ -152,13 +129,6 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
                   Ibang Tanong Naman
                 </button>
               )}
-              <button 
-                onClick={handleDownload}
-                disabled={!isComplete || isCapturing}
-                className="w-full py-4 clay-btn rounded-2xl text-xs md:text-sm font-bold tracking-widest uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2 text-gray-700"
-              >
-                {isCapturing ? 'GAMING...' : 'SAVE RESULT 📸'}
-              </button>
             </div>
           </aside>
         </main>
