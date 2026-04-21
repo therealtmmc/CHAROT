@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", sans-serif;
+  --font-display: "Fredoka", sans-serif;
+}
+
+@layer utilities {
+  .clay-bg {
+    background-color: #e5edf5;
+  }
+  
+  .clay-panel {
+    background-color: #e5edf5;
+    box-shadow: 
+      12px 12px 24px #c3cad2, 
+      -12px -12px 24px #ffffff,
+      inset 4px 4px 8px rgba(255,255,255,0.7),
+      inset -4px -4px 8px rgba(16, 25, 40, 0.04);
+  }
+
+  .clay-panel-white {
+    background-color: #ffffff;
+    box-shadow: 
+      10px 10px 20px #c3cad2, 
+      -10px -10px 20px #ffffff,
+      inset 4px 4px 8px rgba(255,255,255,1),
+      inset -4px -4px 8px rgba(0,0,0,0.03);
+  }
+
+  .clay-btn {
+    background-color: #e5edf5;
+    box-shadow: 
+      6px 6px 12px #c3cad2, 
+      -6px -6px 12px #ffffff,
+      inset 2px 2px 4px rgba(255,255,255,0.8),
+      inset -2px -2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .clay-btn:active {
+    box-shadow: 
+      inset 4px 4px 8px #c3cad2,
+      inset -4px -4px 8px #ffffff;
+  }
+
+  .clay-btn-primary {
+    background-color: #f7a1f7;
+    box-shadow: 
+      6px 6px 14px #c3cad2, 
+      -6px -6px 14px #ffffff,
+      inset 3px 3px 6px rgba(255,255,255,0.6),
+      inset -3px -3px 6px rgba(0,0,0,0.1);
+  }
+  
+  .clay-btn-primary:active {
+    box-shadow: 
+      inset 4px 4px 8px rgba(0,0,0,0.1),
+      inset -4px -4px 8px rgba(255,255,255,0.4);
+  }
+
+  .clay-input {
+    background-color: #e5edf5;
+    box-shadow: 
+      inset 6px 6px 12px #c3cad2, 
+      inset -6px -6px 12px #ffffff;
+  }
+  
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  .clay-card-back {
+    background-color: #f7a1f7;
+    box-shadow: 
+      inset 6px 6px 12px rgba(255,255,255,0.6),
+      inset -6px -6px 12px rgba(0,0,0,0.1);
+  }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+body {
+  background-color: #e5edf5;
+  color: #333;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
